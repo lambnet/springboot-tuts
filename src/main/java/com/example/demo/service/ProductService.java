@@ -25,24 +25,16 @@ public class ProductService {
 
         return productRepository.save(product);
     }
+    //  Task - API to get available product under certain price
+    public List<ProductEntity> fetchAll(boolean isAvailable,long price){
 
-    public List<ProductEntity> fetchAll(){
-        return (List<ProductEntity>) productRepository.findAll();
+        if(isAvailable){
+            return productRepository.findByStockGreaterThanAndPriceLessThanEqual(0, price);
+        }else{
+            return (List<ProductEntity>) productRepository.findAll();
+        }
+
     }
-
-//    public List<ProductEntity> fetchAllInStock(){
-//        return productRepository.findByStockGreaterThan(0);
-//    }
-
-//  Task - API to get available product under certain price
-    public List<ProductEntity> fetchAllPricesLessThan(long price){
-        return productRepository.findByPriceLessThan(price);
-    }
-
-    public List<ProductEntity> fetch(long price){
-            return fetchAllPricesLessThan(price);
-    }
-
 
     public void delete(long id){
          productRepository.deleteById(id);

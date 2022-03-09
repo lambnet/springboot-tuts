@@ -20,9 +20,11 @@ public class ProductController {
     }
 
     @GetMapping("")
-    public List<ProductEntity> getProducts(@RequestParam(value = "maxPrice") long maxPrice){
+    public List<ProductEntity> getProducts(
+            @RequestParam(value = "inStock", defaultValue = "0") boolean inStock,
+            @RequestParam(value = "maxPrice") long maxPrice){
         //TODO: Add code to get all product list here
-        return productService.fetch(maxPrice);
+        return productService.fetchAll(inStock,maxPrice);
     }
 
     @GetMapping("{id}")
