@@ -1,39 +1,53 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.CommonResponse;
+import com.example.demo.dto.ProductDto;
+import com.example.demo.dto.StockDto;
+import com.example.demo.entity.ProductEntity;
+import com.example.demo.service.ProductService;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/api/v1/product")
 public class ProductController {
+    private final ProductService productService;
+
+    public ProductController(ProductService productService) {
+        this.productService = productService;
+    }
 
     @GetMapping("")
-    public CommonResponse getProducts() {
+    public List<ProductEntity> getProducts(@RequestParam(value = "maxPrice") long maxPrice){
         //TODO: Add code to get all product list here
-        return new CommonResponse("Dummy Products");
+        return productService.fetch(maxPrice);
     }
 
     @GetMapping("{id}")
-    public CommonResponse getProduct(@PathVariable("id") String id) {
+    public ProductEntity getProduct(@PathVariable("id") String id) {
         //TODO: Add code to get product here
-        return new CommonResponse("Dummy Product");
+        return productService.getItemById(Long.parseLong(id));
     }
 
     @PostMapping("")
-    public CommonResponse addProduct() {
+    public ProductEntity addProduct(@RequestBody ProductDto productDto) {
         //TODO: Add code to post here
-        return new CommonResponse("Successfully add new product");
+        return productService.add(productDto);
     }
 
     @PutMapping("/stock")
-    public CommonResponse updateStock() {
+    public ProductEntity updateStock(@RequestBody StockDto stockDto) {
         //TODO: Add code to post here
-        return new CommonResponse("Successfully update stock");
+
+        return productService.updateStock(stockDto);
     }
 
     @DeleteMapping("{id}")
     public CommonResponse deleteProduct(@PathVariable("id") String id) {
         //TODO: Add code to get product list here
-        return new CommonResponse("Successfully delete product");
+       productService.delete(Long.parseLong(id));
+       return new CommonResponse("Successfully delete product");
     }
 }
